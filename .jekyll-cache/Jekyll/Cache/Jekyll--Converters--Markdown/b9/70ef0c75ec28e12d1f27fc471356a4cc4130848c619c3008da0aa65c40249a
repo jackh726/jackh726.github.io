@@ -1,0 +1,70 @@
+I"�<p>So. Hello! I’m Jack. And as it may or may not be obvious, this is my first blog post. I don’t want
+to detract from the contents of this post too much, but I figured it’s at least worth a brief
+explanation as to <em>why</em> I’m making it.</p>
+
+<p>First, this is a response to the Rust <a href="https://blog.rust-lang.org/2020/09/03/Planning-2021-Roadmap.html">call for blog posts</a>
+for 2021. Now, I do co-lead the <a href="https://rust-lang.github.io/wg-traits/">traits working group</a> and
+have contributed to <a href="https://github.com/rust-lang/chalk">Chalk</a> a fair bit over the past year. But,
+I do want to put a disclaimer that <em>the points I may make in this post are my own and I’m not
+speaking in any “official” capacity here</em>. I wanted to make this post in case others find my
+thoughts useful. And, frankly, I figured it would be fun.</p>
+
+<p>Well, onto the contents of the post itself.</p>
+
+<h1 id="background">Background</h1>
+
+<p>Okay, let’s start with some background. My day job is actually being a graduate student
+studying bioinformatics. In this field, it’s really a mixed bag of programming languages that you
+see. Python and bash/shell scripts are extremely common for data munging, processing, etc. Python
+also is used often for machine learning. R is used often for plotting, but also some data analysis.
+Anytime you need more raw performance, you see a <em>lot</em> of C or sometimes C++. In the work I do, I
+also heavily use Javscript/Typescript for web development, with a mixing of Kotlin. I use Rust for
+one (unreleased) project, but that’s all so far.</p>
+
+<p>A lot of the libraries and software for bioinformatics are used <em>because other people use them</em>;
+they’ve been peer-reviewed and published, and as more people use them, the more of the <em>de facto</em>
+standard they become. This isn’t bad necessarily: there are plenty of libraries and software that
+is well-maintained, with easily-accesibly source code, that does exactly what you need it to do.
+But, there are also plenty of libraries and software that isn’t well-maintained, the source is hard
+to find, or you need it to do something different.</p>
+
+<p>Now, you might be asking: “how does this relate to Rust?” Well, in a way, it does and it doesn’t.
+In some sense, the conclusion from the past couple paragraphs is “I want more libraries and software
+for bioinformatics written in Rust.” But <em>why</em>? If you think the answer is “because I like the
+language and like writing in it”, you would be partially correct. But, really, it’s because that I
+think Rust has a lot to offer here:</p>
+
+<p>Python and bash are generally okay for data munging and processing, but sometimes you really just
+want some <em>type safety</em>. R is generally excellent for plotting, but…well I’m not even going to try
+to list all the issues here. As far as data analysis tools written in R: have you ever had to hunt
+down documentation, unsure of what exactly that function does? Something like rustdoc would be great
+here. Performance-sensitive libraries and software are where I feel like Rust will shine the most;
+I would probably be preaching to the choir here if I started to list off reasons why. And finally,
+for web development related work, particularly server-side, it would be great to have better
+predictability for the memory and CPU requirements needed.</p>
+
+<p>Eek, that was a longer background than I expected. I guess the tldr is: I like Rust and I think it’s
+a language that offers a lot of promise for many different types of applications. But, at least for
+bioinformatics, there’s more work to be done to build up libraries.</p>
+
+<h1 id="rust-2021">Rust 2021</h1>
+
+<p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+
+<p>Jekyll requires blog post files to be named according to the following format:</p>
+
+<p><code class="language-plaintext highlighter-rouge">YEAR-MONTH-DAY-title.MARKUP</code></p>
+
+<p>Where <code class="language-plaintext highlighter-rouge">YEAR</code> is a four-digit number, <code class="language-plaintext highlighter-rouge">MONTH</code> and <code class="language-plaintext highlighter-rouge">DAY</code> are both two-digit numbers, and <code class="language-plaintext highlighter-rouge">MARKUP</code> is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+
+<p>Jekyll also offers powerful support for code snippets:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
+<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+
+<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
+
+:ET

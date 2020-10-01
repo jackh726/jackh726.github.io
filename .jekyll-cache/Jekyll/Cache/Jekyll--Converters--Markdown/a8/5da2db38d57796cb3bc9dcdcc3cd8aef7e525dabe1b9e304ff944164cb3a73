@@ -1,0 +1,80 @@
+I"Q<p>So. Hello! I’m Jack. And as it may or may not be obvious, this is my first blog post. I don’t want
+to detract from the contents of this post too much, but I figured it’s at least worth a brief
+explanation as to <em>why</em> I’m making it.</p>
+
+<p>First, this is a response to the Rust <a href="https://blog.rust-lang.org/2020/09/03/Planning-2021-Roadmap.html">call for blog posts</a>
+for 2021. Now, I do co-lead the <a href="https://rust-lang.github.io/wg-traits/">traits working group</a> and
+have contributed to <a href="https://github.com/rust-lang/chalk">Chalk</a> a fair bit over the past year. But,
+I do want to put a disclaimer that <em>the points I may make in this post are my own and I’m not
+speaking in any “official” capacity here</em>. I wanted to make this post in case others find my
+thoughts useful. And, frankly, I figured it would be fun.</p>
+
+<p>Well, onto the contents of the post itself.</p>
+
+<h1 id="background">Background</h1>
+
+<p>Okay, let’s start with some background. My day job is actually being a graduate student
+studying bioinformatics. In this field, it’s really a mixed bag of programming languages that you
+see. Python and bash/shell scripts are extremely common for data munging, processing, etc. Python
+also is used often for machine learning. R is used often for plotting, but also some data analysis.
+Anytime you need more raw performance, you see a <em>lot</em> of C or sometimes C++. In the work I do, I
+also heavily use Javscript/Typescript for web development, with a mixing of Kotlin. I use Rust for
+one (unreleased) project, but that’s all so far.</p>
+
+<p>A lot of the libraries and software for bioinformatics are used <em>because other people use them</em>;
+they’ve been peer-reviewed and published, and as more people use them, the more of the <em>de facto</em>
+standard they become. This isn’t bad necessarily: there are plenty of libraries and software that
+is well-maintained, with easily-accesibly source code, that does exactly what you need it to do.
+But, there are also plenty of libraries and software that isn’t well-maintained, the source is hard
+to find, or you need it to do something different.</p>
+
+<p>Now, you might be asking: “how does this relate to Rust?” Well, in a way, it does and it doesn’t.
+In some sense, the conclusion from the past couple paragraphs is “I want more libraries and software
+for bioinformatics written in Rust.” But <em>why</em>? If you think the answer is “because I like the
+language and like writing in it”, you would be partially correct. But, really, it’s because that I
+think Rust has a lot to offer here:</p>
+
+<p>Python and bash are generally okay for data munging and processing, but sometimes you really just
+want some <em>type safety</em>. R is generally excellent for plotting, but…well I’m not even going to try
+to list all the issues here. As far as data analysis tools written in R: have you ever had to hunt
+down documentation, unsure of what exactly that function does? Something like rustdoc would be great
+here. Performance-sensitive libraries and software are where I feel like Rust will shine the most;
+I would probably be preaching to the choir here if I started to list off reasons why. And finally,
+for web development related work, particularly server-side, it would be great to have better
+predictability for the memory and CPU requirements needed.</p>
+
+<p>Eek, that was a longer background than I expected. I guess the tldr is: I like Rust and I think it’s
+a language that offers a lot of promise for many different types of applications. But, at least for
+bioinformatics, there’s more work to be done to build up libraries.</p>
+
+<h1 id="rust-2021">Rust 2021</h1>
+
+<p>Now it’s time for the meat and potatoes: what I want to see from the Rust programming language in 2021.
+I already mentioned in my background that I feel like more <strong>libraries</strong> are needed in Rust,
+particularly around bioinformatics. But, in my opinion, <em>that will come in time</em>, and there’s not
+much that can be done other than making the language something that the people <em>writing</em> those
+libraries want to write in.</p>
+
+<p>What I do want to talk about can maybe summed up into a single word:
+<strong>stability</strong>. Now, this is very much a loaded word: I’m not referring only to
+Rust’s <a href="https://blog.rust-lang.org/2014/10/30/Stability.html">stability guarantee</a>;
+I’m not referring only to libraries moving from <code class="language-plaintext highlighter-rouge">0.*</code> to <code class="language-plaintext highlighter-rouge">1.*</code> versions; I’m not
+referring to only stabilizing nightly features. I’m referring to all of that and
+more. So let’s dive in.</p>
+
+<h2 id="maturity-as-stability">Maturity as stability</h2>
+
+<p>I recently saw a reddit post of someone asking about Rust’s stability. But, in
+their post, they also said a different word: <em>mature</em>. What exactly <em>is</em> a
+mature language? A mature library? Something that doesn’t add many new features?
+Well, then surely C++ wouldn’t be called mature then (since there are numerous
+new features in C++20, for example). One that doesn’t have a lot of bugs? Well,
+good luck.</p>
+
+<p>One way you could imagine maturity is like this: If the maintainers of the
+language or library stopped working on it <em>today</em>, how bad would that be.
+Under this definition, you can imagine something like the C language being very
+mature; the core language hasn’t change much in a long time. A library that has
+been written and does everything it’s supposed to without (more than perhaps a 
+couple) bugs is probably considered mature. C++11?</p>
+:ET
