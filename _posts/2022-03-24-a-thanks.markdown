@@ -5,7 +5,7 @@ date:   2022-03-24 23:00:00 -0400
 categories: rust
 ---
 
-So...this is awkward. I wanted to write this post near the end of 2020 or beginning of 2021, but time got away from me, as it does so often. However, a half-completed draft has been open in my browser this entire time, and I think it'd be a shame for it to go to waste and *not* celebrate all the work done on traits working-group related things and to celebrate the people who have done that amazing work. Given that this is "unofficial" though, I'll be a little less formal than I otherwise would if this was posted to the [Inside Rust Blog](https://blog.rust-lang.org/inside-rust/).
+So...this is awkward. I wanted to write this post near the end of 2021 or beginning of 2022, but time got away from me, as it does so often. However, a half-completed draft has been open in my browser this entire time, and I think it'd be a shame for it to go to waste and *not* celebrate all the work done on traits working-group related things and to celebrate the people who have done that amazing work. Given that this is "unofficial" though, I'll be a little less formal than I otherwise would if this was posted to the [Inside Rust Blog](https://blog.rust-lang.org/inside-rust/).
 
 So, first, if you aren't familiar with the traits working group, the tl;dr is that it's traditonally been dedicated maintaining and improving rustc's trait system design and implementation (including writing a new trait solver, [Chalk](https://github.com/rust-lang/chalk)). In recent times, the scope has, in practice, broadened a bit to include the typesystem overall. Stayed tuned for fun things about this soon.
 
@@ -169,7 +169,7 @@ jackh726: #85499, #90801, #90017, #89285, #88441, #86993
 
 ### Tracking binders
 
-This is mostly an internal implementation detail in rustc. Essentially, it changes the way we track "bound variables", like the `'a` in `for<'a> T: Trait<'a>`. Changing the way we track these didn't, on its own, fix anything. However, it did identify some places where we were doing the wrong things and should hopefully make it more rustc more resilient to these bugs in the future. (It also likely is a prerequiste for Chalk integration.)
+This is mostly an internal implementation detail in rustc. Essentially, it changes the way we track "bound variables", like the `'a` in `for<'a> T: Trait<'a>`. Changing the way we track these didn't, on its own, fix anything. However, it did identify some places where we were doing the wrong things and should hopefully make rustc more resilient to these bugs in the future. (It also likely is a prerequiste for Chalk integration.)
 
 jackh726: #76814, #83870, #83944, #84377, #84559
 
