@@ -1,0 +1,185 @@
+---
+layout: post
+title:  "A thanks to the traits working group in 2021"
+date:   2022-03-24 23:00:00 -0400
+categories: rust
+---
+
+So...this is awkward. I wanted to write this post near the end of 2020 or beginning of 2021, but time got away from me, as it does so often. However, a half-completed draft has been open in my browser this entire time, and I think it'd be a shame for it to go to waste and *not* celebrate all the work done on traits working-group related things and to celebrate the people who have done that amazing work. Given that this is "unofficial" though, I'll be a little less formal than I otherwise would if this was posted to the [Inside Rust Blog](https://blog.rust-lang.org/inside-rust/).
+
+So, first, if you aren't familiar with the traits working group, the tl;dr is that it's traditonally been dedicated maintaining and improving rustc's trait system design and implementation (including writing a new trait solver, [Chalk](https://github.com/rust-lang/chalk)). In recent times, the scope has, in practice, broadened a bit to include the typesystem overall. Stayed tuned for fun things about this soon.
+
+The last real "public" post from the traits working group was at the end of our last sprint...in [July 17 of 2020](https://blog.rust-lang.org/inside-rust/2020/07/17/traits-sprint-3.html). We certainly have been busy since then though. This post will mainly focus on the work done in 2021, but I will do my best to call out notable points from the latter half of 2020.
+
+There will be roughly two kinds of work highlighted here: that which falls under a lang team [initiative](https://lang-team.rust-lang.org/initiatives.html) and that which doesn't, but aligns with longer-term goals of the traits working group. I originally wanted this post to be a larger overview of the different projects and work, but in the interest of just "getting this out", I'll likely keep things fairly brief in explanations. If you're interested in any of the work you see here, I urge you to either look through the cited pull requests or issues, to browse the initiatve repositories, or to come join us on [Zulip](https://rust-lang.zulipchat.com/#narrow/stream/144729-wg-traits) and have a chat.
+
+If you find something I've missed here, or any other mistake, please feel free to message me on Zulip; I really don't want someone to feel like I've left them out intentially and I want them to get the credit they deserve. With that being said, let's get started.
+
+(The issue numbers referenced in this post refer to issues on the [rustc repository](https://github.com/rust-lang/rust)).
+
+## Initiatives
+
+For each of these initiatives, I'll give a brief snippet as to what the initiative is for, as well as list the people who have contributed (also listing pull requests made and issues fixed) to each. Importantly, there are certainly going to be people that I miss here, either because they haven't *directly* contributed code (but have been involved in discussion or design) or because they help out tangentially (making PR rollups, adding regression tests, etc.). I do want to specifically thank them now; that work is important too.
+
+I also want to specifically call out one particular person who will be underrepresented below, but deserves recognition: [Niko Matsakis](https://github.com/nikomatsakis). Though he hasn't made many pull requests for these, he serves as the lang team liason for basically all of them and is instrumental in design and implementation discussions for this work. He also does amazing work co-leading the traits working group with me.
+
+### Generic associated types (GATs)
+
+[Link to initiative](https://rust-lang.github.io/generic-associated-types-initiative/)
+
+For a nice introduction to what GATs are, I'll refer you to a [blog post](https://blog.rust-lang.org/2021/08/03/GATs-stabilization-push.html) I wrote last August. However, in a few words: it's a really neat and powerful language feature that is nearing stabilization. Essentially, it allows you to have generics on associated types in traits (surpisingly given the name). Since the blog post in August, there have been many bug and diagnostic fixes made. We missed the "next couple months" hope for stabilization from the blog post, but that's okay. While I won't cover all the work done *this year* (which is siginficant too), you'll see that 2021 was a busy year in terms of GAT work. We expecting to likely stabilize next release cycle (well, that nightly).
+
+#### Contributions
+
+[b-naber](https://github.com/b-naber)
+PRs: #79554, #82272, #90801 Issues: #67510, #68648 #68649, #68650, #68652, #74684, #76535, #79422, #80433, #81801, #81961, #81862, #84439, #90612
+
+[lcnr](https://github.com/lcnr)
+PRs: #80558 Issues: #69184, #80766
+
+[BoxyUwU](https://github.com/BoxyUwU)
+PRs: #81911 Issues: #75415, #79666
+
+[Jack Huey (jackh726)](https://github.com/jackh726)
+PRs: #86993, #87244, #87281, #84622, #87478, #85499, #89914, #87900, #88846, #88441, #89823, #91849, #89970, #88336, #87478, #84623, #90076, #90887, #91853, #92118, #92191 Issues: #76407, #76826, #78113, #81487, #81823, #84931, #85921, #86787, #87429, #87762, #88360, #88459, #89639, #91036, #90888, #91348 
+
+[Giacomo Stevanato (SkiFire13)](https://github.com/SkiFire13)
+PRs: #85375 Issues: #85347
+
+[Yuki Okushi (JohnTitor)](https://github.com/JohnTitor)
+PRs: #86505 Issues: #86483
+
+[Oli Scherer (oli-obk)](https://github.com/oli-obk)
+PRs: #89229 Issues: #87258, #88595
+
+[Audun Halland (audunhalland)](https://github.com/audunhalland)
+PRs: #89341 Issues: #89188
+
+Unattributed
+#79949, #79636, #78671, #70303, #70304, #71176, #81712, #79768, #87750, #88287, #88405, #90014
+
+### Impl traits (TAITs)
+
+[Link to initiative](https://rust-lang.github.io/impl-trait-initiative/)
+
+This feature essentially allows you to do something like
+```rust
+trait AwesomeTrait {}
+
+type MyType = impl AwesomeTrait;
+```
+
+Basically, rather than requiring you to specify the exact type for `MyType`, it can be *inferred* from how it's used *in the module it's defined*. This means to users of e.g. a library it's "opaque" - all you know is that it impls `AwesomeTrait`. This is also especially nice when the type *can't be named*, like for closures.
+
+#### Contributions
+
+[Santiago Pastorino (spastorino)](https://github.com/spastorino)
+PRs: #86118, #87141, #87501
+Issues: #73481, #77179, #85113
+
+[Oli Scherer (oli-obk)](https://github.com/oli-obk)
+PRs: #87287 #89229, #87107, #87200, #87287, #82898, #87587, #89045, #89024, #90376
+Issues: #74280, #88595
+
+[b-naber](https://github.com/b-naber)
+PRs: #85755
+Issues: #83190, #78450
+
+[tmiasko](https://github.com/tmiasko)
+PRs: #81008
+Issues: #80998
+
+[Esteban Kuber (estebank)](https://github.com/estebank)
+PRs: #83954
+Issues: #83613
+
+[Niko Matsakis (nikomatsakis)](https://github.com/nikomatsakis)
+PRs: #84701 #86437
+
+Unattributed
+#63355, #63591, #65384, #69323, #86201, #88287, #90014
+
+### Dyn upcasting
+
+[Link to initiative](https://rust-lang.github.io/dyn-upcasting-coercion-initiative/design-discussions/)
+
+Have you ever tried to do something like only to have rustc yell at you?
+
+```rust
+trait Foo {}
+trait Bar: Foo {}
+
+let bar_type: &dyn Bar = ...;
+let foo_type: &dyn Foo = bar_type;
+```
+
+Well, with this feature, the above code just works.
+
+#### Contributions
+
+[Charles Lew (crlf0710)](https://github.com/crlf0710)
+PRs: #86264, #86291, #86461, #86475, #88135, #90536 Issues: #89190, #86324, #90177
+
+
+### Negative impls
+
+[Link to initiative](https://rust-lang.github.io/negative-impls-initiative/)
+
+For this, I'll actually give on example how we expect this will be used in the standard library. Currently, the [`Error` trait](https://doc.rust-lang.org/stable/std/error/trait.Error.html) is defined in `std`. It would be nice to move in to core. However, we want to write the following impls:
+```rust
+impl From<&str> for Box<dyn Error> {}
+impl<E> From<E> for Box<dyn Error> where E: Error {}
+```
+But we can't, because we don't know that `&str: Error` will never hold (the way coherence in Rust works, upstream crates are allowed to add new impls). However, if we could add the following to core, it would be fine:
+```rust
+impl !Error for &str {}
+```
+
+This feature allows that.
+
+#### Contributions
+
+[Santiago Pastorino (spastorino)](https://github.com/spastorino)
+PRs: #90104
+
+## Other work
+
+### Projection caching
+
+Without getting into the nitty-gritty details, there was a bug related to incremental compilation and associated type projection caching. Fixing that bug led to some severe performance problems in some cases, so there was additional followup work to fix that too.
+
+Aaron1011: #85382, #85868, #88945, #88994, #89125, #89831, #90423, #92041
+lcnr: #84944
+the8472: #91186
+
+### Normalization under binders
+
+This work fixed a large class of ICEs that have existed since Rust's infancy. The gist of it is that the following code would have problems.
+
+```rust
+fn function<F, T>(f: F)
+where
+    F: for<'a> FnOnce(<T as Trait<'a>>::Assoc),
+    T: for<'b> Trait<'b> {}
+```
+
+Basically, because of the `for<'a>`, the `<T as Trait<'a>>::Assoc` type could normalize in parts of rustc, but not in others.
+
+jackh726: #85499, #90801, #90017, #89285, #88441, #86993
+
+### Tracking binders
+
+This is mostly an internal implementation detail in rustc. Essentially, it changes the way we track "bound variables", like the `'a` in `for<'a> T: Trait<'a>`. Changing the way we track these didn't, on its own, fix anything. However, it did identify some places where we were doing the wrong things and should hopefully make it more rustc more resilient to these bugs in the future. (It also likely is a prerequiste for Chalk integration.)
+
+jackh726: #76814, #83870, #83944, #84377, #84559
+
+### Chalk
+
+For those unfamiliar, [Chalk](https://github.com/rust-lang/chalk) is essentially an implementation of the Rust trait system using a prolog-like solver. While progress here has somewhat slowed as we focus a bit on some rustc things (like GATs, TAITs, etc.), Chalk - and the fundamental idea of "formalizing" the type system and trait solver - remains a strong goal of the traits working group. I've tried to list all the people that contributed to Chalk in the latter half of 2020 and in 2021.
+
+0xflotus, Aaron1011, Areredify, AzureMarker, daboross, HKalbasi, JakobDegen, LeSeulArtichaut, Veykril, basavesh, crlf0710, davidbarsky, detrumi, ectastic-morse, eggyal, ehuss, firefighterduck, flodiebold, henrikhorluck, jackh726, josh65536, lf-, matthewjasper, memoryleak47, memoryruins, nathanwit, nikomatsakis, nrc, pierwill, scalexm, spastorino, super-tuple, vandenheuvel
+
+
+## Concluding words
+
+Again, I wish I had made this post earlier in the year. There's already so much happening in 2022, and not talking about it is very difficult (though always feel free to reach out on Zulip if you're interested). However, I *really* wanted to give credit to all the people above who have done great work.
