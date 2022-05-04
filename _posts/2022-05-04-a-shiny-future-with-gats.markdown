@@ -17,7 +17,7 @@ Well, I've finally finished this post. To go with this, I've posted a [stabiliza
 
 ## Getting our feet wet with higher-kinded types
 
-To start with, I want to cover a pattern involving traits with GATs more-or-less representing the "Self" type. I'll start by introducing two separate but related examples. After I introduce them, I'll explain a bit about how they are similiar. Finally, I'll discuss a bit about a full "higher-kinded types" feature might solve this.
+To start with, I want to cover a pattern involving traits with GATs more-or-less representing the "Self" type. I'll start by introducing two separate but related examples. After I introduce them, I'll explain a bit about how they are similiar. Finally, I'll discuss a bit how a full "higher-kinded types" feature might solve this.
 
 ### Introducing the examples
 
@@ -219,7 +219,7 @@ fn read_two_lines<B: BufRead>(mut lines: Lines<B>) {
 }
 ```
 
-So, this looks great. Why is this imperfect? Well, remember all those methods on iterator with default implementations? We know need to rewrite those. Also, any APIs that take `Iterator` but don't read more than one `Item` at a time would need to be to changed or duplicated to take `LendingIterator`.
+So, this looks great. Why is this imperfect? Well, remember all those methods on iterator with default implementations? We now need to rewrite those. Also, any APIs that take `Iterator` but don't read more than one `Item` at a time would need to be to changed or duplicated to take `LendingIterator`.
 
 ### Reusing `Iterator` in a `LendingIterator` way
 
@@ -242,7 +242,7 @@ where
 
 This is completely fine. In fact, it's mostly the same as the `FromIterator` implementation for `Vec`.
 
-Let me also show what this would look like with a `LendingIterator`. Keep in mind that we *want* this to just `Iterator` with a lifetime parameter on `Iterator::Item`. I'm keeping them separate here to keep comparisons easy to understand.
+Let me also show what this would look like with a `LendingIterator`. Keep in mind that we *want* this to be just `Iterator` with a lifetime parameter on `Iterator::Item`. I'm keeping them separate here to keep comparisons easy to understand.
 
 ```rust
 fn from_iter<A, I>(mut iter: I) -> Vec<A>
@@ -273,7 +273,7 @@ Now let's look at the line labeled `(2)`.
 
 In the `Iterator` example, we can name the type of the item being iterated by doing `I::Item`. With `LendingIterator` though, we can't do this, because `I::Item` isn't a type, it's a *type constructor*. To get an actual type, we have to use a lifetime, like `I::Item<'static>`. This analogous in that you can't just write `let x: Vec;`, you have to write something like `let x: Vec<()>;`.
 
-Now, you might say "oh, but you could just write `Vec<A>` or `Vec<I::Item<'static>` and it will be the same" and you would be correct: that would be fine. But if only it was so simple.
+Now, you might say "oh, but you could just write `Vec<A>` or `Vec<I::Item<'static>>` and it will be the same" and you would be correct: That would be fine. But if only it was so simple.
 
 Again, let's remember the goal of converting `Iterator`. We can't suddently just break all the code out there. So, we have to figure out how to make `v: Vec<I::Item>` work, even if `Iterator::Item` has a lifetime parameter. For the example above, we could just handwave and see that we know that it doesn't matter what lifetime we pass to `I::Item`, since `A` can't bind it. So, we could "desugar" this to either `I::Item<'static>`, some higher-ranked `for<'a> I::Item<'a>`, or maybe some "empty" lifetime `I::Item<'empty>`.
 
@@ -298,9 +298,9 @@ I would love to hear thoughts on how *you* would like to interact with a GATifie
 
 #### *Can* they be separate traits?
 
-As I was writing this blog post, I ask played around with an idea that was brought up at one point or another, I couldn't get it to work then, but was able to get *something* to work, at least a little bit this time.
+As I was writing this blog post, I played around with an idea that was brought up at one point or another. I couldn't get it to work then, but was able to get *something* to work, at least a little bit this time.
 
-So, I'm going to spitball this potentially crazy idea, if for no other than to let people go "what the heck is he thinking" and pick it apart.
+So, I'm going to spitball this potentially crazy idea, if for no other reason than to let people go "what the heck is he thinking" and pick it apart.
 
 So bear with me here. What if we *do* have two traits, `Iterator` and `LendingIterator`, but they look something like this:
 
@@ -357,7 +357,7 @@ Importantly, you could change the top function to use `Iterator` and it works (t
 
 There are couple pain points here that I've found as I played with it a bit; let me go through them.
 
-First, you can't actually call `next()` on a type that implements `Iterator` without disambiguating the `next` function of `Iterator` and `LendingIterator`. The "simple" solution is to rename `LendingIterator::next` to something like `lend_next`. I've tried play with making the defintion of `Iterator` be `Iterator: LendingIterator`, but haven't gotten it to work.
+First, you can't actually call `next()` on a type that implements `Iterator` without disambiguating the `next` function of `Iterator` and `LendingIterator`. The "simple" solution is to rename `LendingIterator::next` to something like `lend_next`. I've tried making the defintion of `Iterator` be `Iterator: LendingIterator`, but haven't gotten it to work.
 
 The other pain point (which might actually be *good*), is that all (already existing) functions don't *automatically* get to take a `LendingIterator`. I *think* changing from `I: Iterator` to `I: LendingIterator` is a backwards compatible change, but haven't worked through it to be sure. Related to this, if your impl of `LendingIterator` *just so happens* to not name the lifetime parameter on `Item`, you can't use a function that takes `Iterator`. But again, maybe this is the right thing.
 
