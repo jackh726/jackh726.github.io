@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "A shiny future with GATs"
-date:   2022-03-24 23:00:00 -0400
+date:   2022-05-04 10:30 -0400
 categories: rust
 ---
 
