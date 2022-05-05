@@ -7,6 +7,8 @@ categories: rust
 
 This was a surprisingly difficult blog post to write. Between general life things getting in the way and feeling a bit of lost steam, this took much longer than I expected.
 
+Before I go further, if you don't know what GATs (generic associated types) are, then I recommend reading [this blog post](https://blog.rust-lang.org/2021/08/03/GATs-stabilization-push.html) from August of last year.
+
 A bit over [a year ago](https://github.com/rust-lang/rust/issues/44265#issuecomment-775423925), the traits working group started to talk seriously about stabilizing GATs. I and others worked to close issues and move that forward. In [June last year](https://github.com/rust-lang/rust/issues/44265#issuecomment-869888398), I estimated October for stabilization. Well, turns out there were some things that we needed to do first (besides fixing bugs), like [implementing an outlives lint](https://github.com/rust-lang/rust/pull/89970) and [changing the location of where clauses on GATs](https://github.com/rust-lang/rust/pull/90076). [In December](https://github.com/rust-lang/rust/issues/44265#issuecomment-990287168), once again, I said "we're close." Around Feburary or [March](https://github.com/rust-lang/rust/issues/44265#issuecomment-1066173042), we felt like we were finally in a place to stabilize. Except for one *small* thing: this blog post.
 
 The goal of this blog post is to try to imagine a "shiny future" where we have GATs. It's to consider a couple of the patterns that people want GATs for, how we might want to integrate GATs into standard library traits, and a few issues that don't work *today* that we want to work in the future. We want this so that we have a future to strive for after stabilization. There are known shortcomings with GATs right now, but that's okay. They're already powerful and, as you'll see, we have some thoughts on how to make them more powerful and ergonomic in the future.
@@ -367,7 +369,7 @@ So, yeah. This was my crazy revelation while writing this. Here's a playground l
 
 ## The `for<'a> Self: 'a` problem
 
-It's interesting, just earlier this week an absolutely beautiful blog post was published by Sabrina Jewson (https://sabrinajewson.org/blog/the-better-alternative-to-lifetime-gats) that mostly covered this problem, and gave some good and interesting solutions.
+It's interesting, just earlier this week an absolutely beautiful blog post was published by Sabrina Jewson ([link](https://sabrinajewson.org/blog/the-better-alternative-to-lifetime-gats)) that mostly covered this problem, and gave some good and interesting solutions.
 
 I'll briefly restate the problem, but if you're interested in a more "user-friendly" explantation defintion go check out Sabrina's post; it's great. I'll use the same `LendingIterator` example Sabrina uses, the problem definitely pops up in [even](https://github.com/rust-lang/rust/issues/90696) [more](https://github.com/rust-lang/rust/issues/91693) [subtle](https://github.com/rust-lang/rust/issues/92096) [places](https://github.com/rust-lang/rust/issues/95268).
 
@@ -383,7 +385,7 @@ pub trait LendingIterator {
 }
 ```
 
-Second, we encount a piece of code where we reference an GAT using a lifetime from a HRTB:
+Second, we encounter a piece of code where we reference an GAT using a lifetime from a HRTB:
 
 ```rust
 fn print_items<I>(mut iter: I)
@@ -401,6 +403,8 @@ As noted in Sabrina's post, the problem comes because we try to prove that `for<
 
 This is a bug. And one that is fixable in an almost certainly backwards-compatible manner. But it's also tough to fix. So it's not something we want to block stabilization on.
 
+To give a *brief* teaser to what a fix *might* look like, you might want to check out Niko Matsakis [a-mir-formality](https://github.com/nikomatsakis/a-mir-formality). The key part of this formalism of the Rust type system (that differs from the current rustc and Chalk solvers), is the introduction of the "ensures" clause and the separation from an "implication" clause. If I understand the model correctly, I think this is crucial to being able to model and solve this problem.
+
 ## Object safety
 
 Right now, you can't use GATs with `dyn`. In other words, the following doesn't work:
@@ -417,6 +421,8 @@ We expect this to work just fine one day, but there are still some implementatio
 
 ## Wrapping up
 
-Hopefully this post provides a little bit of a glimmer of a shiny future with GATs. Ultimately, I don't think I can do justice to the many different use cases of GATs and the power they provide. I can't wait to see the types of projects people build with them.
+Hopefully this post provides a little bit of a glimmer of a shiny future with GATs. I wanted to make this post more "glamorous" but really just fell short on time. I might publish a part 2 of this at some point in the coming months; we'll see.
+
+Ultimately though, I don't think I can do justice to the many different use cases of GATs and the power they provide. If you'd like to get a sense of the many projects that are "waiting" for GATs, just take a scroll through the [tracking issue](https://github.com/rust-lang/rust/issues/44265) and see the numerous issues from external projects linking to it. I can't wait to see the types of projects people build with them.
 
 If you feel like I've missed anything, please feel to reach out.
