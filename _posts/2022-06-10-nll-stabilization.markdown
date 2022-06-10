@@ -9,6 +9,8 @@ Well, at least, the NLL borrow checker finally got fully enabled by default - bu
 
 Let's start with the basics. What am I writing this post for? For a few reasons, actually. First, many lifetime errors have changed on nightly (and will hit stable in August), so I want to introduce them a bit, because I think they're really cool. Second, I want to give a little history of how we got here, because I think it's always important to look at things in retrospect. And third, along the way, I want to shout out all the work done by various contributors to get this enabled. I personally have done very little of the work here; I'm mostly going to be telling a story written by others, and they deserve all the credit.
 
+Also note, while there are a handle a things that will now compile that didn't before, I won't really talk about them here. The list is small and most people won't hit them. The [stabilization PR](https://github.com/rust-lang/rust/pull/95565) has a couple examples.
+
 I'll start by just including a snippet of the stabilization report, which gives a brief summary of the motivation of this change, which might help frame the current text.
 
 >Over time, the Rust borrow checker has become "smarter" and thus allowed more programs to compile. There have been three different implementations: AST borrowck, MIR borrowck, and polonius (well, in progress). Additionally, there is the "lexical region resolver", which (roughly) solves the constraints generated through HIR typeck. It is not a full borrow checker, but does emit some errors.
